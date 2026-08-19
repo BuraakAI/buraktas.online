@@ -4,7 +4,7 @@ import { getCollection } from "astro:content";
 export async function GET(context) {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
   return rss({
-    title: "AurelionLabs — Notlar",
+    title: "Burak Taş — Notlar",
     description: "Burak Taş: AI, otonom sistemler ve tarım teknolojileri üzerine notlar.",
     site: context.site,
     items: posts
