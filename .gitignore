@@ -1,9 +1,13 @@
-.fal_key
-.DS_Store
 node_modules/
 dist/
+.astro/
+.vercel/
+.DS_Store
+.fal_key
 *.zip
 landing-mockup.html
 /assets/
+/docs/
 payload*.json
 response*.json
+.frag.html

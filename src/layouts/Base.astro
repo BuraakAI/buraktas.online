@@ -1,0 +1,61 @@
+---
+import "../styles/global.css";
+interface Props { title: string; description?: string; image?: string; }
+const {
+  title,
+  description = "AI ile işleri ustalığa taşıyorum.",
+  image = "/assets/og.jpg",
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://buraktas.online");
+---
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#F3EDE1" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/jpeg" href="/assets/favicon.jpg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(image, canonical)} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    />
+    <link rel="alternate" type="application/rss+xml" title="AurelionLabs — Notlar" href="/rss.xml" />
+  </head>
+  <body>
+    <slot />
+    <footer>🐇 AurelionLabs · hız &amp; itina · 2026 · buraktas.online</footer>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script is:inline>
+      document.documentElement.classList.add("js");
+      const io = new IntersectionObserver(
+        (es) => { for (const e of es) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } } },
+        { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
+      );
+      document.querySelectorAll(".rv").forEach((el) => io.observe(el));
+      function toast(msg) {
+        const t = document.getElementById("toast");
+        if (!t) return;
+        t.textContent = msg; t.classList.add("show");
+        clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), 2800);
+      }
+      document.querySelectorAll(".js-mail").forEach((a) => {
+        a.addEventListener("click", () => {
+          const em = "buraktasbiosystem@gmail.com";
+          try { if (navigator.clipboard) navigator.clipboard.writeText(em); } catch (e) {}
+          toast("E-posta panoya kopyalandı ✓  " + em);
+        });
+      });
+    </script>
+  </body>
+</html>

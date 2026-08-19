@@ -1,0 +1,50 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+const fmt = (d: Date) =>
+  d.toLocaleDateString("tr-TR", { year: "numeric", month: "long", day: "numeric" });
+---
+
+<Base
+  title="Notlar — AurelionLabs"
+  description="Burak Taş'ın notları: AI, otonom sistemler ve tarım teknolojileri üzerine yazılar."
+>
+  <nav class="topnav">
+    <a class="topnav-logo" href="/">
+      <img src="/assets/favicon.jpg" alt="AurelionLabs" /> AurelionLabs
+    </a>
+    <a href="/">← Ana sayfa</a>
+  </nav>
+
+  <main class="blog-wrap">
+    <header class="blog-head">
+      <span class="eyebrow">Blog</span>
+      <h1 class="section-title serif">Notlar</h1>
+      <p class="section-intro">
+        AI, otonom sistemler ve tarım teknolojileri üzerine yazılar, deneyler ve ship logları.
+      </p>
+    </header>
+
+    {
+      posts.length === 0 ? (
+        <p class="post-desc">Yakında ilk yazı burada olacak.</p>
+      ) : (
+        <ul class="post-list">
+          {posts.map((p) => (
+            <li class="post-item">
+              <a href={`/blog/${p.slug}`}>
+                <time datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
+                <span class="post-title serif">{p.data.title}</span>
+                <span class="post-desc">{p.data.description}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </main>
+</Base>
