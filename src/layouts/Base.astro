@@ -1,20 +1,25 @@
 ---
 import "../styles/global.css";
-interface Props { title: string; description?: string; image?: string; lang?: "tr" | "en"; }
+interface Props { title: string; description?: string; image?: string; lang?: "tr" | "en"; redirect?: boolean; }
 const {
   title,
   description = "AI ile işleri ustalığa taşıyorum.",
   image = "/assets/og.jpg",
   lang = "tr",
+  redirect = false,
 } = Astro.props;
 const isEN = lang === "en";
 const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://buraktas.online");
+// Uluslararası ziyaretçiyi /en'e yönlendir — kullanıcının açık dil tercihine (localStorage) saygı duyarak
+const redirectJS =
+  "(function(){try{var s=localStorage.getItem('site-lang');if(s==='en'){location.replace('/en'+location.search+location.hash);return;}if(s==='tr'){return;}var L=navigator.languages||[navigator.language||''];var tr=L.some(function(l){return (l||'').toLowerCase().indexOf('tr')===0;});if(!tr){location.replace('/en'+location.search+location.hash);}}catch(e){}})();";
 ---
 <!doctype html>
 <html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {redirect && <script is:inline set:html={redirectJS} />}
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#F3EDE1" />
@@ -36,7 +41,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://buraktas.on
   </head>
   <body>
     <nav class="langswitch" aria-label="language">
-      <a href="/" class={isEN ? "" : "on"}>TR</a><span>/</span><a href="/en" class={isEN ? "on" : ""}>EN</a>
+      <a href="/" data-lang="tr" class={isEN ? "" : "on"}>TR</a><span>/</span><a href="/en" data-lang="en" class={isEN ? "on" : ""}>EN</a>
     </nav>
     <slot />
     <footer>🐇 Burak Taş · {isEN ? "fast & precise" : "hız & itina"} · 2026 · buraktas.online</footer>
@@ -59,6 +64,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://buraktas.on
           const em = "buraktasbiosystem@gmail.com";
           try { if (navigator.clipboard) navigator.clipboard.writeText(em); } catch (e) {}
           toast("E-posta panoya kopyalandı ✓  " + em);
+        });
+      });
+      document.querySelectorAll(".langswitch a[data-lang]").forEach((a) => {
+        a.addEventListener("click", () => {
+          try { localStorage.setItem("site-lang", a.getAttribute("data-lang")); } catch (e) {}
         });
       });
     </script>
