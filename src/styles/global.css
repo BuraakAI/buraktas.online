@@ -220,3 +220,13 @@
 .prose blockquote{ border-left:3px solid var(--gold); padding-left:16px; margin:0 0 18px; color:var(--brown); font-style:italic; }
 .post-back{ display:inline-block; margin-top:30px; font-size:12px; letter-spacing:.04em; color:var(--brown); text-decoration:none; }
 .post-back:hover{ color:var(--gold-dp); }
+
+/* ===== Dil anahtarı (TR/EN) ===== */
+.langswitch{ position:fixed; top:14px; right:16px; z-index:60; display:flex; align-items:center; gap:7px;
+  font-family:"JetBrains Mono", monospace; font-size:11px; letter-spacing:.1em;
+  background:rgba(32,27,20,.72); color:var(--card-mut); padding:6px 12px; border-radius:999px;
+  border:1px solid rgba(224,178,58,.28); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); }
+.langswitch a{ color:var(--card-mut); text-decoration:none; }
+.langswitch a.on{ color:var(--gold); font-weight:700; }
+.langswitch a:hover{ color:#fff; }
+.langswitch span{ opacity:.45; }

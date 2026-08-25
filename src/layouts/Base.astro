@@ -1,15 +1,17 @@
 ---
 import "../styles/global.css";
-interface Props { title: string; description?: string; image?: string; }
+interface Props { title: string; description?: string; image?: string; lang?: "tr" | "en"; }
 const {
   title,
   description = "AI ile işleri ustalığa taşıyorum.",
   image = "/assets/og.jpg",
+  lang = "tr",
 } = Astro.props;
+const isEN = lang === "en";
 const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://buraktas.online");
 ---
 <!doctype html>
-<html lang="tr">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -33,8 +35,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://buraktas.on
     <link rel="alternate" type="application/rss+xml" title="Burak Taş — Notlar" href="/rss.xml" />
   </head>
   <body>
+    <nav class="langswitch" aria-label="language">
+      <a href="/" class={isEN ? "" : "on"}>TR</a><span>/</span><a href="/en" class={isEN ? "on" : ""}>EN</a>
+    </nav>
     <slot />
-    <footer>🐇 Burak Taş · hız &amp; itina · 2026 · buraktas.online</footer>
+    <footer>🐇 Burak Taş · {isEN ? "fast & precise" : "hız & itina"} · 2026 · buraktas.online</footer>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
     <script is:inline>
       document.documentElement.classList.add("js");

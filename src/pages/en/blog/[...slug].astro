@@ -1,21 +1,21 @@
 ---
-import Base from "../../layouts/Base.astro";
+import Base from "../../../layouts/Base.astro";
 import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog", ({ data }) => !data.draft && data.lang === "tr");
+  const posts = await getCollection("blog", ({ data }) => !data.draft && data.lang === "en");
   return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
 }
 
 const { post } = Astro.props;
 const { Content } = await post.render();
 const fmt = (d: Date) =>
-  d.toLocaleDateString("tr-TR", { year: "numeric", month: "long", day: "numeric" });
+  d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 ---
 
-<Base title={`${post.data.title} — Burak Taş`} description={post.data.description}>
+<Base lang="en" title={`${post.data.title} — Burak Taş`} description={post.data.description}>
   <nav class="topnav">
-    <a class="topnav-logo" href="/">
+    <a class="topnav-logo" href="/en">
       <img src="/assets/favicon.jpg" alt="Burak Taş" /> Burak Taş
     </a>
   </nav>
@@ -39,6 +39,6 @@ const fmt = (d: Date) =>
         <Content />
       </div>
     </article>
-    <a class="post-back" href="/blog">← Tüm notlar</a>
+    <a class="post-back" href="/en/blog">← All notes</a>
   </main>
 </Base>

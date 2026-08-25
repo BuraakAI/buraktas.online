@@ -1,20 +1,21 @@
 ---
-import Base from "../../layouts/Base.astro";
+import Base from "../../../layouts/Base.astro";
 import { getCollection } from "astro:content";
 
-const posts = (await getCollection("blog", ({ data }) => !data.draft && data.lang === "tr")).sort(
+const posts = (await getCollection("blog", ({ data }) => !data.draft && data.lang === "en")).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 );
 const fmt = (d: Date) =>
-  d.toLocaleDateString("tr-TR", { year: "numeric", month: "long", day: "numeric" });
+  d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 ---
 
 <Base
-  title="Notlar — Burak Taş"
-  description="Burak Taş'ın notları: AI, otonom sistemler ve tarım teknolojileri üzerine yazılar."
+  lang="en"
+  title="Notes — Burak Taş"
+  description="Notes by Burak Taş on AI, autonomous systems and agricultural technology."
 >
   <nav class="topnav">
-    <a class="topnav-logo" href="/">
+    <a class="topnav-logo" href="/en">
       <img src="/assets/favicon.jpg" alt="Burak Taş" /> Burak Taş
     </a>
   </nav>
@@ -22,20 +23,20 @@ const fmt = (d: Date) =>
   <main class="blog-wrap">
     <header class="blog-head">
       <span class="eyebrow">Blog</span>
-      <h1 class="section-title serif">Notlar</h1>
+      <h1 class="section-title serif">Notes</h1>
       <p class="section-intro">
-        AI, otonom sistemler ve tarım teknolojileri üzerine yazılar, deneyler ve ship logları.
+        Writing, experiments and ship logs on AI, autonomous systems and agricultural technology.
       </p>
     </header>
 
     {
       posts.length === 0 ? (
-        <p class="post-desc">Yakında ilk yazı burada olacak.</p>
+        <p class="post-desc">The first note is coming soon.</p>
       ) : (
         <ul class="post-list">
           {posts.map((p) => (
             <li class="post-item">
-              <a href={`/blog/${p.slug}`}>
+              <a href={`/en/blog/${p.slug}`}>
                 <time datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
                 <span class="post-title serif">{p.data.title}</span>
                 <span class="post-desc">{p.data.description}</span>
